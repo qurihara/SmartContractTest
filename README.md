@@ -1,7 +1,7 @@
 # Solidityによるスマートコントラクト演習
 ## NFTを作ってみる
 
-以下の記事に従ってイーサリアムと互換性のあるPolygonとう暗号通貨ブロックチェーンを使ってNFTを作り、送り合うという演習をします。
+以下の記事を参考にしてイーサリアムと互換性のあるPolygonとう暗号通貨ブロックチェーンを使ってNFTを作り、送り合うという演習をします。
 
 https://qiita.com/somk_2301/items/1d36522698e56b1cf22c
 
@@ -10,9 +10,17 @@ https://qiita.com/somk_2301/items/1d36522698e56b1cf22c
 
 # 事前準備（当日の演習にむけ、ここまで準備していただけるとありがたいです）
 
-まずmacのターミナルでいろいろ作業するので、以下を準備します。すでにご自身のPCにセットアップされている場合は飛ばしてください。
+# コードエディタの準備
+
+開発用のコードエディタを準備します。AI支援で快適なcursorか、その土台となった多機能エディタのvisual studio codeのどちらかがよいと思いますのでインストールしてください。私はcursorを使ってます。
+
+* https://www.cursor.com/
+* https://code.visualstudio.com/
+
+次にmacのターミナルでいろいろ作業するので、以下を準備します。すでにご自身のPCにセットアップされている場合は飛ばしてください。
 
 * macのパッケージマネージャーhomebrewのインストール
+
 https://brew.sh/ja/
 
 
@@ -54,6 +62,24 @@ node　-v
 ```shell
 git clone https://github.com/qurihara/SmartContractTest.git
 cd SmartContractTest
+```
+
+今回準備したサンプルプロジェクトのセットアップをします。
+
+```shell
+npm install
+```
+
+開発環境を確認するために、ためしに以下を実行してみます。
+
+```shell
+npx hardhat comple
+```
+
+以下のように表示されていればOKです。
+
+```shell
+Compiled 16 Solidity files successfully (evm target: paris).
 ```
 
 開発準備は終了です。次はブラウザで各種準備をします。
@@ -106,8 +132,68 @@ metamaskで、もらったテストネット用POLの残高が増えているこ
 
 ## Archemyでプロジェクトをつくる
 
-下記を参考に
+下記を参考にします。ただし、この記事はイーサリアムのテストネットであるsepoliaを用いるプロジェクトですが、我々はPolygonのテストネットであるAmoyを用いるプロジェクトなので、選択を間違えないようにします。
+
 https://docs.alchemy.com/docs/how-to-deploy-a-smart-contract-to-the-sepolia-testnet
 
+（栗原が準備段階でどう選択したか覚えていないので、当日に確認しあいながら進めたく思います）
+
+一番重要なのは、プロジェクトの API Key という文字列を取得することです。そこまで進んだら、あとは上記ドキュメントは不要です。
+
+## ターミナルで秘密鍵とAPI Keyを設定する
+
+ターミナルで、現在作業しているSmartContractTestのディレクトリ内で以下を実行し、metamaskの秘密鍵とAlchemyのAPI Keyを入力します。これにより、ソースコード内に機密情報を書かなくて済むので、安全に開発できます。
+
+```shell
+npx hardhat vars set ALCHEMY_API_KEY
+√ Enter value: · {API KEYを入力}
+```
+
+
+```shell
+npx hardhat vars set ACCOUNT_PRIVATE_KEY
+√ Enter value: · {秘密鍵を入力}
+```
+## スマートコントラクトを書く
+
+contracts/NyNft.solをコードエディタで開きます。
+
+
+```shell
+  constructor() ERC721("KuriNFT", "KNFT") Ownable(msg.sender) // ここがポイント！
+```
+ここでKuriNFTとKNFTのところを好きな文字列に変えましょう。最初が正式名称、次が略称です。
+
+```shell
+npx hardhat compile
+```
+
+コンパイルが無事できたでしょうか。
+OKならテストを実行し、問題ないことを確認します。
+
+```shell
+npx hardhat test
+```
+
+テストコードはtestフォルダにあり、NFTとして備えるべき一般的な性質を満たしているかがテストされます。（たとえば、オーナーしかつくることができないとか、送付時に所有権が適切に移るとか。これは本来は自分で書きます。）
+次にローカルネットワークにデプロイ（≒ブロックチェーンに載せて実行する）します。ローカルネットワークというのはあなたのPC上に作られた自分だけのテスト環境です。テストネットとはちがいます。テストネットは世界に一つしかありません。ローカルネットワークはあなたのPC上にあり、いくらでも作れます。何をやってもOKです。
+
+```shell
+npx hardhat run scripts/deploy.js
+```
+deployedと表示されれば成功です。
+いよいよテストネットにデプロイします。これは自分の口座のテストネットPOLを消費します。
+
+```shell
+npx hardhat run scripts/NewTokenDeploy.js --network polygonAmoy
+```
+私の環境で0.019POL消費しました。
+metamaskで表示しましょう。metamaskで「エクスプローラーで表示」をクリック。contract creationをクリックして、コントラクトアドレスを取得します。
+[https://gyazo.com/d7ff99d24672a8775c6d256e93e27521]
+
+NFTをインポートします。「トークンのインポート」をします。トークンのインポートは、以下画像の中央右の「てんてんてん」をクリックすると可能
+[https://gyazo.com/8448bbc1441ff13d496631c885b1c284]
+
+完了！
 
 
