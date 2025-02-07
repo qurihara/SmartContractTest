@@ -1,0 +1,33 @@
+node_modules
+.env
+
+# Hardhat files
+/cache
+/artifacts
+
+# TypeChain files
+/typechain
+/typechain-types
+
+# solidity-coverage files
+/coverage
+/coverage.json
+
+# Hardhat Ignition default folder for deployments against a local node
+ignition/deployments/chain-31337
+
+# Node.js関連
+node_modules/
+
+# ログファイル
+logs/
+*.log
+
+# OS固有のファイル
+.DS_Store
+Thumbs.db
+
+# エディタやIDEの設定
+.vscode/
+.idea/
+

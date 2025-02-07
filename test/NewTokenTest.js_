@@ -1,0 +1,58 @@
+const {loadFixture} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
+const { expect } = require("chai");
+const { ethers } = require("hardhat");
+
+describe("Fixture", function () {
+
+    // 各テストで使いまわす処理(コントラクトのデプロイなど)はひとつの関数にまとめ、適宜loadFixture()で呼び出す
+    async function deployFaucetFixture() {
+        // アカウントを2個取得
+        const [owner, otherAccount] = await ethers.getSigners();
+        const ownerAddress =await  owner.getAddress();
+        const otherAddress =await  otherAccount.getAddress();
+        // トークンの初期供給量を1000に設定し、ownerアカウントでコントラクトをデプロイする
+        const initialSupply = 1000;
+        const NewToken = await ethers.getContractFactory("NewToken");
+        const newToken = await NewToken.deploy(initialSupply);
+        const newTokenAddress =newToken.address;
+        return { newToken, newTokenAddress,initialSupply, owner, ownerAddress,otherAccount ,otherAddress};
+    }
+
+
+    // デプロイに関するテスト
+    describe("Deployment", function () {
+        // ownerに1000トークン付与されているか
+        it("Should mint owner 1000 tokens when deployed", async function () {
+            const { newToken,  ownerAddress, initialSupply} = await loadFixture(deployFaucetFixture);
+            const ownerBalance =await newToken.balanceOf(ownerAddress)
+            // console.log("ownerBalance:"+ownerBalance);
+            await expect(ownerBalance).to.equal(initialSupply);
+        });
+        // ownerに適切な権限付与がなされているか
+        it("Should set the right owner", async function () {
+            const { newToken, ownerAddress } = await loadFixture(deployFaucetFixture);
+            expect(await newToken.owner()).to.equal(ownerAddress);
+        });
+    });
+    // 関数Mint()に関するテスト
+    describe("Mint", function () {
+        // ownerがMintを呼び出した時、指定した数量だけownerにトークンが付与されるか
+        it("Should mint to owner", async function () {
+            const { newToken, ownerAddress} = await loadFixture(deployFaucetFixture);
+            const mintValue = 100;
+            await expect(newToken.Mint(ownerAddress,mintValue)).to.changeTokenBalance(newToken,ownerAddress,mintValue);
+        });
+        // otherAccountがMintを呼び出した時、指定した数量だけotherAccountにトークンが付与されるか
+        it("Should mint to otherAccount", async function () {
+            const { newToken, otherAddress} = await loadFixture(deployFaucetFixture);
+            const mintValue = 100;
+            await expect(newToken.Mint(otherAddress,mintValue)).to.changeTokenBalance(newToken,otherAddress,mintValue);
+        });
+        // 関数Mint()を呼び出した時、イベントMintEvent()が呼び出されるか
+        it("Should emit 'mint' event", async function () {
+            const { newToken, ownerAddress } = await loadFixture(deployFaucetFixture);
+            const mintValue = 100;
+            await expect(newToken.Mint(ownerAddress,mintValue)).to.emit(newToken,"MintEvent").withArgs(ownerAddress,100) ;
+        });
+    });
+});
