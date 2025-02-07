@@ -174,26 +174,65 @@ OKならテストを実行し、問題ないことを確認します。
 ```shell
 npx hardhat test
 ```
-
+エラーがでましたよね。問題ないです。
 テストコードはtestフォルダにあり、NFTとして備えるべき一般的な性質を満たしているかがテストされます。（たとえば、オーナーしかつくることができないとか、送付時に所有権が適切に移るとか。これは本来は自分で書きます。）
+
+test/MyNft.jsをコードエディタで開いて、KuriNFT、KNFTと書かれているところを先程決めた自分の文字列に変えて保存し、再度テストしてみてください。テストが成功すると思います。
+
 次にローカルネットワークにデプロイ（≒ブロックチェーンに載せて実行する）します。ローカルネットワークというのはあなたのPC上に作られた自分だけのテスト環境です。テストネットとはちがいます。テストネットは世界に一つしかありません。ローカルネットワークはあなたのPC上にあり、いくらでも作れます。何をやってもOKです。
 
 ```shell
 npx hardhat run scripts/deploy.js
 ```
 deployedと表示されれば成功です。
+scripts/deploy.jsをコードエディタで見てみましょう。Archemyのおかげで、簡単にデプロイできています。
+
 いよいよテストネットにデプロイします。これは自分の口座のテストネットPOLを消費します。
 
 ```shell
 npx hardhat run scripts/NewTokenDeploy.js --network polygonAmoy
 ```
 私の環境で0.019POL消費しました。
+
 metamaskで表示しましょう。metamaskで「エクスプローラーで表示」をクリック。contract creationをクリックして、コントラクトアドレスを取得します。
-[https://gyazo.com/d7ff99d24672a8775c6d256e93e27521]
+![コントラクトアドレス](https://i.gyazo.com/d7ff99d24672a8775c6d256e93e27521.png)
 
-NFTをインポートします。「トークンのインポート」をします。トークンのインポートは、以下画像の中央右の「てんてんてん」をクリックすると可能
-[https://gyazo.com/8448bbc1441ff13d496631c885b1c284]
+```shell
+npx hardhat vars set CONTRACT_ADDRESS
+```
+コントラクトアドレスを追加してください。
 
-完了！
+次にNFTを鋳造（mint）します。金貨の発行みたいなニュアンスです。
+scripts/mint.js を見てみましょう。
+
+```shell
+const tokenId = 0;
+```
+
+のtokenIdが鋳造するNFTのIDです。（一度作ったら、次は1などにしないといけません。）
+
+ローカルネットでテストします。
+
+```shell
+npx hardhat run scripts/mint.js 
+```
+
+テストネットにデプロイします。
+
+```shell
+npx hardhat run scripts/mint.js --network polygonAmoy
+```
+
+metamaskでNFTをインポートし表示させます。
+
+NFTをインポートします。ネットワーク（左上）をAmoyにして、「トークンのインポート」をします。トークンのインポートは、以下画像の中央右の「てんてんてん」をクリックすると可能です。
+![NFTのインポート](https://i.gyazo.com/8448bbc1441ff13d496631c885b1c284.png)
+
+ここで必要になるアドレスは、「エクスプローラーで表示」でmint実行した履歴のToの値です。Token IDはTransaction Hashをクリックすると開く詳細に書いてあります。
+
+
+無事NFTとともに画像が表示されれば完了！他の方にNFTを送ってみましょう！
+
+ほぼ同じ手順で、NFTだけでなく自分独自の暗号通貨も作れます。
 
 
