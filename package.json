@@ -5,5 +5,8 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.2.0"
+  },
+  "scripts": {
+    "compile:abi": "npx hardhat compile && node scripts/extractAbi.js"
   }
 }
