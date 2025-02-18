@@ -75,13 +75,14 @@ npm install
 開発環境を確認するために、ためしに以下を実行してみます。
 
 ```shell
-npx hardhat comple
+npx hardhat
 ```
 
-以下のように表示されていればOKです。
+以下のようにhardhatというツールについてのヘルプ情報が表示されていればOKです。バージョン情報は私の環境のものですので、皆さんの番号は違うかも知れません。
 
 ```shell
-Compiled 16 Solidity files successfully (evm target: paris).
+Hardhat version 2.22.17
+（以下略）
 ```
 
 開発準備は終了です。次はブラウザで各種準備をします。
