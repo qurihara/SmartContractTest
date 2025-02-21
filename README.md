@@ -75,13 +75,14 @@ npm install
 開発環境を確認するために、ためしに以下を実行してみます。
 
 ```shell
-npx hardhat comple
+npx hardhat
 ```
 
-以下のように表示されていればOKです。
+以下のようにhardhatというツールについてのヘルプ情報が表示されていればOKです。バージョン情報は私の環境のものですので、皆さんの番号は違うかも知れません。
 
 ```shell
-Compiled 16 Solidity files successfully (evm target: paris).
+Hardhat version 2.22.17
+（以下略）
 ```
 
 開発準備は終了です。次はブラウザで各種準備をします。
@@ -121,14 +122,15 @@ metamaskはデフォルトではイーサリアムの管理をしますが、他
 
 Faucetは「蛇口」です。開発用に、無価値な暗号通貨である「テストネット用POL」を蛇口から分けてもらいます。1回で0.2POLもらえます。1日1回くらいしかもらえないと思います。意外と枯渇しやすいです。まとまった量のPOLをもらえるフォームもあり、私はこれで一括で100POLいただきました😊（イーサリアムのテストネットのSepolia用の通貨もくれる蛇口があるのですが、こちらは本物のメインネット仮想通貨を少量持っていないと使えない制限があるみたいです。）
 
-
-https://faucet.polygon.technology/
-
-
+* https://faucet.polygon.technology/ にアクセス
 * Networkで　PolygonPos (Amoy)を選択
 * Wallet Address　にmetamaskのAmoyの自分の秘密鍵をコピーアンドペーストする
 * Connect Discord and get tokensを押す。
 * 最初はなぜかうまくいかなかったけど、何度が繰り返すとうまくいきました。
+
+2025/2/21追記
+
+* インタフェースが変わり、ものによっては（テストネット用ではない本物の）POLが口座にないともらえないようになってしまったようです。いくつかあるサービスのどれかを選べば、もらえるかもしれません。
 
 
 metamaskで、もらったテストネット用POLの残高が増えていることを確認してください。
@@ -142,6 +144,10 @@ metamaskで、もらったテストネット用POLの残高が増えているこ
 https://docs.alchemy.com/docs/how-to-deploy-a-smart-contract-to-the-sepolia-testnet
 
 （私自身が本教材作成時にどう選択したか覚えていないので、演習時に確認しながら進めましょう）
+
+こちらから作ります。
+
+https://dashboard.alchemy.com/
 
 一番重要なのは、プロジェクトの API Key という文字列を取得することです。そこまで進んだら、あとは上記ドキュメントは不要です。
 
@@ -203,7 +209,7 @@ scripts/deploy.jsをコードエディタで見てみましょう。Alchemyの�
 いよいよテストネットにデプロイします。これは自分の口座のテストネットPOLを消費します。
 
 ```shell
-npx hardhat run scripts/NewTokenDeploy.js --network polygonAmoy
+npx hardhat run scripts/deploy.js --network polygonAmoy
 ```
 私の環境で0.019POL消費しました。
 
@@ -250,6 +256,7 @@ NFTをインポートします。ネットワーク（左上）をAmoyにして�
 ![NFTのインポート](https://i.gyazo.com/8448bbc1441ff13d496631c885b1c284.png)
 
 ここで必要になるアドレスは、「エクスプローラーで表示」でmint実行した履歴のToの値です。Token IDはTransaction Hashをクリックすると開く詳細に書いてあります。
+※Token IDは今回は0で固定です（プログラムでtokenId = 0;と設定したため）
 
 無事NFTとともに画像が表示されれば完了！（地味な感動ポイント😊）
 他の方にNFTを送ってみましょう！
