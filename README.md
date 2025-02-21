@@ -144,6 +144,10 @@ https://docs.alchemy.com/docs/how-to-deploy-a-smart-contract-to-the-sepolia-test
 
 （私自身が本教材作成時にどう選択したか覚えていないので、演習時に確認しながら進めましょう）
 
+こちらから作ります。
+
+https://dashboard.alchemy.com/
+
 一番重要なのは、プロジェクトの API Key という文字列を取得することです。そこまで進んだら、あとは上記ドキュメントは不要です。
 
 ## ターミナルで秘密鍵とAPI Keyを設定する
