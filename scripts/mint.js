@@ -22,7 +22,7 @@ require("@nomicfoundation/hardhat-toolbox");
          const tokenId = 0;
          const nftTxn = await myNftContract.safeMint(to, tokenId);
          await nftTxn.wait();
-         console.log(`NFT Minted! Check it out at: https://etherscan.io/tx/${nftTxn.hash}`);
+         console.log(`NFT Minted! Check it out at: https://amoy.polygonscan.com/tx/${nftTxn.hash}`);
        } catch (error) {
          console.error("Error minting NFT:", error);
          process.exit(1);
