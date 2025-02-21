@@ -210,7 +210,7 @@ scripts/deploy.jsをコードエディタで見てみましょう。Alchemyの�
 いよいよテストネットにデプロイします。これは自分の口座のテストネットPOLを消費します。
 
 ```shell
-npx hardhat run scripts/NewTokenDeploy.js --network polygonAmoy
+npx hardhat run scripts/deploy.js --network polygonAmoy
 ```
 私の環境で0.019POL消費しました。
 
