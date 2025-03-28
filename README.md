@@ -54,7 +54,7 @@ nodebrew ls
 
 ```shell
 nodebrew use v20.11.0
-node　-v
+node -v
 ```
 
 （現在私はv20.11.0とv22.13.0で動作確認しています。）
