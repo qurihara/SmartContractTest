@@ -69,6 +69,10 @@ cd SmartContractTest
 今回準備したサンプルプロジェクトのセットアップをします。
 
 ```shell
+npm install --save-dev hardhat
+```
+
+```shell
 npm install
 ```
 
